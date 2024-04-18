@@ -46,22 +46,19 @@ def remove_beginning(audio_data, sample_rate):
 
 
 def remove_dead_space(audio_data, sample_rate):
+    vad = EnergyVAD(
+        sample_rate=16000,
+        frame_length=150,  # in milliseconds
+        frame_shift=20,  # in milliseconds
+        energy_threshold=0.04,  # you may need to adjust this value
+        pre_emphasis=0.95,
+    )
     for data in audio_data:
-        A = data["waveform"]
-        vad = EnergyVAD(
-            sample_rate=16000,
-            frame_length=150,  # in milliseconds
-            frame_shift=20,  # in milliseconds
-            energy_threshold=0.04,  # you may need to adjust this value
-            pre_emphasis=0.95,
-        )
-        data["waveform"] = torch.from_numpy(vad.apply_vad(A))
+        data["waveform"] = torch.from_numpy(vad.apply_vad(data["waveform"]))
     return audio_data
 
-def data_augmentation(audio_data):
-    return audio_data
 
-def create_augmented_data(input_folder, output_folder):
+def clean_data(input_folder, output_folder):
     # load data files from data folder
     audio_data, sample_rate = load_data(input_folder)
 
@@ -69,8 +66,5 @@ def create_augmented_data(input_folder, output_folder):
     audio_data = remove_beginning(audio_data, sample_rate)
     # remove dead space in the middle of audio
     audio_data = remove_dead_space(audio_data, sample_rate)
-    # data augmentation
-    audio_data = data_augmentation(audio_data)
-
     # save augmented data
     save_data(audio_data, output_folder, sample_rate)
