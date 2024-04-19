@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from vad import EnergyVAD
 
 
-def load_data(data_folder):
+def load_data(data_folder, raw=False):
     audio_data = []
     sample_rate = None
     for filename in os.listdir(data_folder):
@@ -15,13 +15,16 @@ def load_data(data_folder):
             continue
         file_path = os.path.join(data_folder, filename)
         waveform, sr = torchaudio.load(file_path)
-        audio_data.append(
-            {
-                "waveform": waveform,
-                "sample_rate": sr,
-                "filename": filename
-            }
-        )
+        if raw is False:
+            audio_data.append(
+                {
+                    "waveform": waveform,
+                    "sample_rate": sr,
+                    "filename": filename
+                }
+            )
+        else:
+            audio_data.append(waveform)
         if sample_rate is None:
             sample_rate = sr
         assert sample_rate is None or sample_rate == sr
@@ -34,7 +37,11 @@ def save_data(audio_data, output_folder, sample_rate):
 
     for data in audio_data:
         filename, extension = os.path.splitext(data["filename"])
-        file_path = os.path.join(output_folder, f"{filename}_augmented{extension}")
+        try:
+            filename = f"{filename}_aug{data['augmented']}"
+        except KeyError:
+            pass
+        file_path = os.path.join(output_folder, f"{filename}{extension}")
         torchaudio.save(file_path, data["waveform"], sample_rate)
 
 
