@@ -1,0 +1,34 @@
+
+20 mfccs
+
+gmm = GaussianMixture(n_components=13, covariance_type="full",
+                      verbose=1, verbose_interval=1, n_init=1)
+train_gmm(gmm, train_non_target)
+
+gmm_target = GaussianMixture(n_components=5, covariance_type="full",
+                             verbose=1, verbose_interval=1, n_init=1)
+train_gmm(gmm_target, train_target)
+
+train accuracy target   : 0.73
+train accuracy nontarget: 0.99
+
+val accuracy target   : 1.00
+val accuracy nontarget: 0.93
+
+val accuracy aug target   : 0.66
+val accuracy aug nontarget: 0.96
+
+val accuracy target-train-clean   : 0.95
+val accuracy nontarget-train-clean: 1.00
+=================================================
+Initialization converged: True
+train accuracy target   : 0.67
+train accuracy nontarget: 0.99
+val accuracy target   : 0.60
+val accuracy nontarget: 1.00
+val accuracy aug target   : 0.45
+val accuracy aug nontarget: 0.99
+val accuracy target-split-train-clean   : 0.10
+val accuracy nontarget-split-train-clean: 1.00
+
+stejne jako vyse ale
