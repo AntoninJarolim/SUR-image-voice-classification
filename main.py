@@ -15,6 +15,32 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
 
+def plot_elipses():
+    fig, ax = plt.subplots()
+    for n, color in enumerate('rgbbb'):
+        v, w = np.linalg.eigh(gmm.covariances_[n][:2, :2])
+        u = w[0] / np.linalg.norm(w[0])
+        angle = np.arctan2(u[1], u[0])
+        angle = 180 * angle / np.pi  # convert to degrees
+        v *= 9
+        ell = matplotlib.patches.Ellipse(gmm.means_[n, :2], v[0], v[1],
+                                         angle=180 + angle, color=color)
+        ell.set_clip_box(ax.bbox)
+        ell.set_alpha(0.1)
+        ax.add_artist(ell)
+
+        ax.set_xlim(-25000, 25000)
+        ax.set_ylim(-25000, 25000)
+
+
+def plot_dims(a, b):
+    fig, ax = plt.subplots()
+    for n in range(n_speakers):
+        data = x_train.data[y_train == n]
+        plt.scatter(data[:500, a], data[:500, b], 0.8)
+    plt.show()
+
+
 def apply_effect(waveform, sample_rate):
     augment = Compose([
         AddGaussianNoise(min_amplitude=0.001, max_amplitude=0.01, p=0.25),
@@ -147,8 +173,7 @@ gmm_target.fit(x_train_target)
 gmm_target.fit(x_train_target)
 
 
-def get_accuracy(x, y):
-    y_gt = np.array([yi if yi == 0 else 1 for yi in y])
+def get_accuracy(x, y_gt):
 
     nr_non_target_samples = len(y_gt[y_gt != 0])
     nr_target_samples = len(y_gt[y_gt == 0])
@@ -156,15 +181,10 @@ def get_accuracy(x, y):
     apriori_non_target = nr_non_target_samples / (nr_non_target_samples + nr_target_samples)
     apriori_target = nr_target_samples / (nr_non_target_samples + nr_target_samples)
 
-    print(gmm.score_samples(x))
-    print(np.log(apriori_non_target))
-    print(gmm.score_samples(x) + np.log(apriori_non_target))
-
-    log_likelihood = gmm.score_samples(x) # + np.log(apriori_non_target)
-    log_likelihood_target = gmm_target.score_samples(x) #  + np.log(apriori_target)
+    log_likelihood = gmm.score_samples(x)  # + np.log(apriori_non_target)
+    log_likelihood_target = gmm_target.score_samples(x)  # + np.log(apriori_target)
 
     y_train_pred = np.argmax(np.vstack([log_likelihood_target, log_likelihood]), axis=0)
-    print("Prediction mean: ", y_train_pred.mean())
 
     total_acc = np.mean(y_train_pred == y_gt) * 100
     target_acc = np.mean(y_train_pred[y_gt == 0] == 0) * 100
@@ -172,33 +192,14 @@ def get_accuracy(x, y):
     return total_acc, target_acc, non_target_acc
 
 
+print("Per MFCC accuracy:")
 for dataset in ["train", "val", "val_aug"]:
     x, y = locals()[f"x_{dataset}_all"], locals()[f"y_{dataset}_all"]
-    total_acc, target_acc, non_target_acc = get_accuracy(x, y)
-    print(f'{dataset} accuracy: {total_acc:0.2f}, target_acc: {target_acc:0.2f}, non-target_acc: {non_target_acc:0.2f}')
+    y_gt = np.array([yi if yi == 0 else 1 for yi in y])
+    total_acc, target_acc, non_target_acc = get_accuracy(x, y_gt)
+    print(
+        f'\t{dataset} accuracy: {total_acc:0.2f}, target_acc: {target_acc:0.2f}, non-target_acc: {non_target_acc:0.2f}')
 
-
-def plot_elipses():
-    fig, ax = plt.subplots()
-    for n, color in enumerate('rgbbb'):
-        v, w = np.linalg.eigh(gmm.covariances_[n][:2, :2])
-        u = w[0] / np.linalg.norm(w[0])
-        angle = np.arctan2(u[1], u[0])
-        angle = 180 * angle / np.pi  # convert to degrees
-        v *= 9
-        ell = matplotlib.patches.Ellipse(gmm.means_[n, :2], v[0], v[1],
-                                         angle=180 + angle, color=color)
-        ell.set_clip_box(ax.bbox)
-        ell.set_alpha(0.1)
-        ax.add_artist(ell)
-
-        ax.set_xlim(-25000, 25000)
-        ax.set_ylim(-25000, 25000)
-
-
-def plot_dims(a,b):
-    fig, ax = plt.subplots()
-    for n in range(n_speakers):
-        data = x_train.data[y_train == n]
-        plt.scatter(data[:500, a], data[:500, b], 0.8)
-    plt.show()
+print("Per audio file accuracy:")
+for val_audio in x_train_target:
+    y_gt =

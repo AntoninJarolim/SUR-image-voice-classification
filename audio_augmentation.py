@@ -2,8 +2,6 @@ import os
 
 import torch
 import torchaudio
-import torchaudio.functional as F
-import matplotlib.pyplot as plt
 from vad import EnergyVAD
 
 
@@ -54,7 +52,7 @@ def remove_beginning(audio_data, sample_rate):
 
 def remove_dead_space(audio_data, sample_rate):
     vad = EnergyVAD(
-        sample_rate=16000,
+        sample_rate=sample_rate,
         frame_length=150,  # in milliseconds
         frame_shift=20,  # in milliseconds
         energy_threshold=0.04,  # you may need to adjust this value
