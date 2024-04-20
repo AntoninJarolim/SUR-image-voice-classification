@@ -138,30 +138,27 @@ def prepare_loaded_data(non_target, target):
 
 train_non_target, sample_rate = load_data("data/training/non_target")
 train_target, _ = load_data("data/training/target")
+x_train_all, y_train_all = prepare_loaded_data(train_non_target, train_target)
+x_train, x_train_target = x_train_all[y_train_all != 0], x_train_all[y_train_all == 0]
+y_train, Y_train_target = y_train_all[y_train_all != 0], y_train_all[y_train_all == 0]
+
 
 validation_non_target, _ = load_data("data/validation/non_target")
 validation_target, _ = load_data("data/validation/target")
+x_val_all, y_val_all = prepare_loaded_data(validation_non_target, validation_target)
+x_val, x_val_target = x_val_all[y_val_all != 0], x_val_all[y_val_all == 0]
+y_val, y_val_target = y_val_all[y_val_all != 0], y_val_all[y_val_all == 0]
+
 
 validation_non_target_aug, _ = load_data("data/validation/non_target_augmented")
 validation_target_aug, _ = load_data("data/validation/target_augmented")
-
-x_train_all, y_train_all = prepare_loaded_data(train_non_target, train_target)
-x_val_all, y_val_all = prepare_loaded_data(validation_non_target, validation_target)
 x_val_aug_all, y_val_aug_all = prepare_loaded_data(validation_non_target_aug, validation_target_aug)
+x_val_aug, x_val_target_aug = x_val_aug_all[y_val_aug_all != 0], x_val_aug_all[y_val_aug_all == 0]
+y_val_aug, y_val_target_aug = y_val_aug_all[y_val_aug_all != 0], y_val_aug_all[y_val_aug_all == 0]
 
 # x_train_all = PCA().fit_transform(x_train_all)
 # x_val_all = PCA().fit_transform(x_val_all)
 # x_val_aug_all = PCA().fit_transform(x_val_aug_all)
-
-x_train, x_train_target = x_train_all[y_train_all != 0], x_train_all[y_train_all == 0]
-y_train, Y_train_target = y_train_all[y_train_all != 0], y_train_all[y_train_all == 0]
-
-x_val, x_val_target = x_val_all[y_val_all != 0], x_val_all[y_val_all == 0]
-y_val, y_val_target = y_val_all[y_val_all != 0], y_val_all[y_val_all == 0]
-
-x_val_aug, x_val_target_aug = x_val_aug_all[y_val_aug_all != 0], x_val_aug_all[y_val_aug_all == 0]
-y_val_aug, y_val_target_aug = y_val_aug_all[y_val_aug_all != 0], y_val_aug_all[y_val_aug_all == 0]
-
 n_speakers = len(set(y_train.numpy()))
 gmm = GaussianMixture(n_components=13, covariance_type="full",
                       verbose=1, verbose_interval=1, n_init=1)
