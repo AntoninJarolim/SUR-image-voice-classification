@@ -44,6 +44,12 @@ python3.12 main.py --predict > gmm_audio
 Allows to specify image data path. 
 Example usage:
 ```shell
-python3.12 main.py --img-data-path  > image_cnn
+python3.12 main.py --img-data-path ./data/eval  > image_cnn
+```
+
+## Combining evaluation results
+To average evaluations from both classifiers and perform new hard decision on averaged results:
+```shell
+python3.12 main.py --average-classifiers image_cnn --average-classifiers gmm_audio
 ```
 
