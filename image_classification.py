@@ -85,7 +85,8 @@ def classify(data_path:Path, model_path:Path = Path("image_model.pth")):
         print("No images found in data directory", file=sys.stderr)
         return
 
-    model = torch.load(str(model_path))
+    model = Eye()
+    model.load_state_dict(torch.load(str(model_path)))
     with torch.no_grad():
         for image_path in data_path.iterdir():
             if image_path.suffix != ".png":
