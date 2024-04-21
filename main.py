@@ -1,4 +1,8 @@
 import argparse
+
+import numpy as np
+import scipy
+
 from audio_augmentation import create_audio_data
 from audio_classification import train_gmms, classify_audio
 import pandas as pd
@@ -19,9 +23,12 @@ def merge_scores(classifier_path_list):
     df2 = pd.read_csv(classifier_path_list[1], delimiter=" ", names=names)
 
     df_res = pd.merge(df1, df2, on="id")
+    # df_res["soft_x"] = df_res["soft_x"].apply(lambda x: x if x < 0.85 else 0.85)
+    # df_res["soft_x"] = df_res["soft_x"].apply(lambda x: x if x > 0.15 else 0.15)
     df_res["soft"] = (df_res["soft_x"] + df_res["soft_y"]) / 2
+
     df_res["hard"] = (df_res["soft"] > 0.5).astype(int)
-    df_res.to_csv("combined", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
+    df_res.to_csv("audio_gmm_image_conv_noconfidence", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
 
 
 if __name__ == "__main__":
