@@ -3,7 +3,7 @@ import os.path
 import torch
 import torchaudio
 from sklearn.mixture import GaussianMixture, GaussianMixture
-from audio_augmentation import load_data, create_audio_data
+from audio_augmentation import load_data, create_audio_data, clean_data
 import numpy as np
 
 sample_rate = 8000
@@ -29,7 +29,11 @@ def add_features(audio_list):
         pass
 
 
-def load_data_features(path):
+def load_data_features(path, clean_first=False):
+    if clean_first:
+        path_clean = path + "_clean"
+        clean_data(path, path_clean)
+        path = path_clean
     data_features = load_data(path)
     add_features(data_features)
     return data_features
@@ -138,7 +142,7 @@ def classify_audio():
     gmm_target = load_gmm("gmm-target")
     gmm = load_gmm("gmm-non-target")
 
-    test_data = load_data_features("data/eval-data/eval/")
+    test_data = load_data_features("data/eval/", clean_first=True)
 
     per_audio_accuracy(test_data, gmm, gmm_target)
 
