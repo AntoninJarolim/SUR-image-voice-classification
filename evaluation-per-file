@@ -22,13 +22,111 @@ val accuracy target-train-clean   : 0.95
 val accuracy nontarget-train-clean: 1.00
 =================================================
 Initialization converged: True
-train accuracy target   : 0.67
+train accuracy target   : 0.75
 train accuracy nontarget: 0.99
-val accuracy target   : 0.60
+val accuracy target   : 0.90
 val accuracy nontarget: 1.00
-val accuracy aug target   : 0.45
-val accuracy aug nontarget: 0.99
-val accuracy target-split-train-clean   : 0.10
+val accuracy aug target   : 0.59
+val accuracy aug nontarget: 0.98
+val accuracy target-split-train-clean   : 0.05
+val accuracy nontarget-split-train-clean: 1.00
+==============================================
+train accuracy target   : 0.88
+train accuracy nontarget: 0.99
+val accuracy target   : 1.00
+val accuracy nontarget: 0.97
+val accuracy aug target   : 0.83
+val accuracy aug nontarget: 0.97
+val accuracy target-split-train-clean   : 0.95
 val accuracy nontarget-split-train-clean: 1.00
 
-stejne jako vyse ale
+
+gmm = GaussianMixture(n_components=13, covariance_type="full",
+                          verbose=1, verbose_interval=1, n_init=1)
+train_gmm(gmm, train_non_target)
+
+gmm_target = GaussianMixture(n_components=5, covariance_type="full",
+                             verbose=1, verbose_interval=1, n_init=1)
+train_gmm(gmm_target, train_target)
+======================================
+13 mfccs + delta
+Initialization converged: True
+train accuracy target   : 0.80
+train accuracy nontarget: 1.00
+val accuracy target   : 0.50
+val accuracy nontarget: 0.98
+val accuracy aug target   : 0.52
+val accuracy aug nontarget: 0.99
+val accuracy target-split-train-clean   : 0.60
+val accuracy nontarget-split-train-clean: 1.00
+=========================================
+Initialization converged: True
+train accuracy target   : 0.98
+train accuracy nontarget: 0.57
+val accuracy target   : 1.00
+val accuracy nontarget: 0.53
+val accuracy aug target   : 0.91
+val accuracy aug nontarget: 0.45
+val accuracy target-split-train-clean   : 1.00
+val accuracy nontarget-split-train-clean: 0.09
+
+train accuracy target   : 0.97
+train accuracy nontarget: 0.63
+val accuracy target   : 1.00
+val accuracy nontarget: 0.67
+val accuracy aug target   : 0.89
+val accuracy aug nontarget: 0.54
+val accuracy target-split-train-clean   : 1.00
+val accuracy nontarget-split-train-clean: 0.14
+==========================================
+cas se vysrat na delta mfcc a zacit
+Variational Bayesian Gaussian Mixture
+porad 13 vzorku
+==
+20+tied
+5+full
+
+Initialization converged: True
+train accuracy target   : 0.96
+train accuracy nontarget: 0.69
+val accuracy target   : 1.00
+val accuracy nontarget: 0.73
+val accuracy aug target   : 0.91
+val accuracy aug nontarget: 0.64
+val accuracy target-split-train-clean   : 1.00
+val accuracy nontarget-split-train-clean: 0.35
+==
+25+full
+10+full
+train accuracy target   : 0.85
+train accuracy nontarget: 0.97
+val accuracy target   : 1.00
+val accuracy nontarget: 0.92
+val accuracy aug target   : 0.82
+val accuracy aug nontarget: 0.94
+val accuracy target-split-train-clean   : 1.00
+val accuracy nontarget-split-train-clean: 0.98
+
+
+Initialization converged: False
+train accuracy target   : 0.91
+train accuracy nontarget: 0.97
+
+val accuracy target   : 1.00
+val accuracy nontarget: 0.92
+
+val accuracy aug target   : 0.84
+val accuracy aug nontarget: 0.94
+
+val accuracy target-split-train-clean   : 1.00
+val accuracy nontarget-split-train-clean: 0.98
+
+final ===================
+train accuracy target   : 0.93
+train accuracy nontarget: 0.96
+val accuracy target   : 1.00
+val accuracy nontarget: 0.92
+val accuracy aug target   : 0.85
+val accuracy aug nontarget: 0.93
+val accuracy target-split-train-clean   : 1.00
+val accuracy nontarget-split-train-clean: 0.98

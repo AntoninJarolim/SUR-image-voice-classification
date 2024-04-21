@@ -1,4 +1,3 @@
-
 PCA both + 20 mfccs
 Train accuracy: 87.07
 Validation accuracy: 82.97
