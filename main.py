@@ -8,6 +8,9 @@ from image_classification import classify_images
 
 
 def merge_scores(classifier_path_list):
+    if len(classifier_path_list) == 1:
+        return
+
     if len(classifier_path_list) > 2:
         raise NotImplementedError("Currently merging of only two classifiers is implemented.")
 
@@ -18,7 +21,7 @@ def merge_scores(classifier_path_list):
     df_res = pd.merge(df1, df2, on="id")
     df_res["soft"] = (df_res["soft_x"] + df_res["soft_y"]) / 2
     df_res["hard"] = (df_res["soft"] > 0.5).astype(int)
-    df_res.to_csv("audio_gmm_image_conv", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
+    df_res.to_csv("combined", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
 
 
 if __name__ == "__main__":
@@ -29,7 +32,7 @@ if __name__ == "__main__":
     parser.add_argument("--average-classifiers", help='List of files to average and perform new hard classification.',
                         action='append')
     parser.add_argument("--img-data-path", type=Path)
-    parser.add_argument("--img-model-path", type=Path, default=Path("models/image_model.pth"))
+    parser.add_argument("--img-model-path", type=Path, default=Path("image_model.pth"))
 
     args = vars(parser.parse_args())
 
@@ -45,5 +48,5 @@ if __name__ == "__main__":
     if args["img_data_path"]:
         classify_images(args["img_data_path"], args["img_model_path"])
 
-    if len(args["average_classifiers"]) > 1:
+    if ["average_classifiers"] is not None:
         merge_scores(args["average_classifiers"])
