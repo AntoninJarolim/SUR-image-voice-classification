@@ -32,7 +32,7 @@ if __name__ == "__main__":
     parser.add_argument("--average-classifiers", help='List of files to average and perform new hard classification.',
                         action='append')
     parser.add_argument("--img-data-path", type=Path)
-    parser.add_argument("--img-model-path", type=Path, default=Path("image_model.pth"))
+    parser.add_argument("--img-model-path", type=Path, default=Path("models/image_model.pth"))
 
     args = vars(parser.parse_args())
 
@@ -48,5 +48,5 @@ if __name__ == "__main__":
     if args["img_data_path"]:
         classify_images(args["img_data_path"], args["img_model_path"])
 
-    if ["average_classifiers"] is not None:
+    if args["average_classifiers"] is not None:
         merge_scores(args["average_classifiers"])
