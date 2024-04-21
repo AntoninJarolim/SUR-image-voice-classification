@@ -48,8 +48,10 @@ python3.12 main.py --img-data-path ./data/eval  > image_cnn
 ```
 
 ## Combining evaluation results
-To average evaluations from both classifiers and perform new hard decision on averaged results:
+Use `--average-classifiers` to average evaluations from both classifiers and perform 
+new hard decision on averaged results. Argument takes path to file to combine.
+Example usage:
 ```shell
-python3.12 main.py --average-classifiers image_cnn --average-classifiers gmm_audio
+python3.12 main.py --average-classifiers gmm_audio --average-classifiers image_cnn 
 ```
-
+The result can be found in file `combined`,
