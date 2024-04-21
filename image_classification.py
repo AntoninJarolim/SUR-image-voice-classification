@@ -74,7 +74,7 @@ class Eye(nn.Module):
         x = torch.sigmoid(x)
         return x
 
-def classify(data_path:Path, model_path:Path = Path("image_model.pth")):
+def classify_images(data_path:Path, model_path:Path = Path("image_model.pth")):
     if not model_path.exists():
         print("Model not found", file=sys.stderr)
         return
@@ -98,7 +98,7 @@ def classify(data_path:Path, model_path:Path = Path("image_model.pth")):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("data_path", type=Path)
-    parser.add_argument("--model_path", type=Path, default=Path("image_model.pth"))
+    parser.add_argument("--img-data-path", type=Path)
+    parser.add_argument("--img-model-path", type=Path, default=Path("models/image_model.pth"))
     args = parser.parse_args()
-    classify(args.data_path, args.model_path)
+    classify_images(args.data_path, args.model_path)
