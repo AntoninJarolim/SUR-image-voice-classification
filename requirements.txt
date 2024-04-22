@@ -41,9 +41,9 @@ soundfile==0.12.1
 soxr==0.3.7
 sympy==1.12
 threadpoolctl==3.4.0
-torch==2.2.2+cpu
-torchaudio==2.2.2+cpu
-torchvision==0.17.2+cpu
+torch==2.2.2
+torchaudio==2.2.2
+torchvision==0.17.2
 typing_extensions==4.11.0
 tzdata==2024.1
 urllib3==2.2.1
