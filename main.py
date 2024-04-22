@@ -46,7 +46,7 @@ if __name__ == "__main__":
     if args["predict_audio"]:
         classify_audio(args["data_path"])
 
-    if args["predict-image"]:
+    if args["predict_image"]:
         classify_images(args["data_path"], args["img_model_path"])
 
     if args["average_classifiers"]:
