@@ -11,7 +11,7 @@ from pathlib import Path
 from image_classification import classify_images
 
 
-def merge_scores(classifier_path_list):
+def merge_scores(classifier_path_list, clip_second):
     if len(classifier_path_list) == 1:
         return
 
@@ -23,12 +23,12 @@ def merge_scores(classifier_path_list):
     df2 = pd.read_csv(classifier_path_list[1], delimiter=" ", names=names)
 
     df_res = pd.merge(df1, df2, on="id")
-    # df_res["soft_x"] = df_res["soft_x"].apply(lambda x: x if x < 0.85 else 0.85)
-    # df_res["soft_x"] = df_res["soft_x"].apply(lambda x: x if x > 0.15 else 0.15)
+    if clip_second:
+        df_res["soft_x"] = np.clip(df_res["soft_x"], 0.15, 0.85)
     df_res["soft"] = (df_res["soft_x"] + df_res["soft_y"]) / 2
 
     df_res["hard"] = (df_res["soft"] > 0.5).astype(int)
-    df_res.to_csv("audio_gmm_image_conv_noconfidence", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
+    df_res.to_csv("combined", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
 
 
 if __name__ == "__main__":
@@ -39,6 +39,9 @@ if __name__ == "__main__":
     parser.add_argument('--predict-image', help='Predict labels for new image data.', action='store_true')
     parser.add_argument("--average-classifiers", help='List of files to average and perform new hard classification.',
                         nargs='+', default=[])
+    parser.add_argument('--average-classifiers-clip',
+                        help='Clips second parameter passed with --average-classifiers to range 0.15-0.85.',
+                        action='store_true')
     parser.add_argument("--data-path", type=Path, default=Path("data/eval"))
     parser.add_argument("--img-model-path", type=Path, default=Path("models/image_model.pth"))
 
@@ -57,4 +60,4 @@ if __name__ == "__main__":
         classify_images(args["data_path"], args["img_model_path"])
 
     if args["average_classifiers"]:
-        merge_scores(args["average_classifiers"])
+        merge_scores(args["average_classifiers"], args["average_classifiers_clip"])
