@@ -28,10 +28,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Classification of images and voices of a person.')
     parser.add_argument('--augment-audio', help='Creates audio augmented data.', action='store_true')
     parser.add_argument('--train-gmm', help='Performs training of GMM models.', action='store_true')
-    parser.add_argument('--predict', help='Predict labels for new data.', action='store_true')
+    parser.add_argument('--predict-audio', help='Predict labels for new audio data.', action='store_true')
+    parser.add_argument('--predict-image', help='Predict labels for new image data.', action='store_true')
     parser.add_argument("--average-classifiers", help='List of files to average and perform new hard classification.',
-                        action='append')
-    parser.add_argument("--img-data-path", type=Path)
+                        nargs='+', default=[])
+    parser.add_argument("--data-path", type=Path, default=Path("data/eval"))
     parser.add_argument("--img-model-path", type=Path, default=Path("models/image_model.pth"))
 
     args = vars(parser.parse_args())
@@ -42,11 +43,11 @@ if __name__ == "__main__":
     if args["train_gmm"]:
         train_gmms()
 
-    if args["predict"]:
-        classify_audio()
+    if args["predict_audio"]:
+        classify_audio(args["data_path"])
 
-    if args["img_data_path"]:
-        classify_images(args["img_data_path"], args["img_model_path"])
+    if args["predict-image"]:
+        classify_images(args["data_path"], args["img_model_path"])
 
-    if args["average_classifiers"] is not None:
+    if args["average_classifiers"]:
         merge_scores(args["average_classifiers"])

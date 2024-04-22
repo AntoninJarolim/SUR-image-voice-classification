@@ -5,6 +5,7 @@ import torchaudio
 from sklearn.mixture import GaussianMixture, GaussianMixture
 from audio_augmentation import load_data, create_audio_data, clean_data
 import numpy as np
+from pathlib import Path
 
 sample_rate = 8000
 
@@ -138,11 +139,11 @@ def load_gmm(gmm_name):
     return loaded_gmm
 
 
-def classify_audio():
+def classify_audio(data_path: Path):
     gmm_target = load_gmm("gmm-target")
     gmm = load_gmm("gmm-non-target")
 
-    test_data = load_data_features("data/eval/", clean_first=True)
+    test_data = load_data_features(str(data_path), clean_first=True)
 
     per_audio_accuracy(test_data, gmm, gmm_target)
 
