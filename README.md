@@ -20,9 +20,6 @@ Validation data must be in following directories:
 `data/validation/target`
 `data/validation/non_target`
 
-Evaluation audio files must be in folder `./data/eval`.
-
-
 # Training models 
 Please refer to image_training.ipynb for CNN training.
 
@@ -37,14 +34,14 @@ This saves trained gmm weights, means and covariances to `models/` folder.
  Prints predictions to stdout.
 Example usage:
 ```shell
-python3.12 main.py --predict > gmm_audio
+python3.12 main.py --predict-audio --data-path ./data/eval > gmm_audio
 ```
 
 ### Image classification
 Allows to specify image data path. 
 Example usage:
 ```shell
-python3.12 main.py --img-data-path ./data/eval  > image_cnn
+python3.12 main.py --predict-image --data-path ./data/eval > image_cnn
 ```
 
 ## Combining evaluation results
@@ -52,6 +49,6 @@ Use `--average-classifiers` to average evaluations from both classifiers and per
 new hard decision on averaged results. Argument takes path to file to combine.
 Example usage:
 ```shell
-python3.12 main.py --average-classifiers gmm_audio --average-classifiers image_cnn 
+python3.12 main.py --average-classifiers gmm_audio image_cnn 
 ```
 The result can be found in file `combined`,
