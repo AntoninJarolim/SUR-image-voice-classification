@@ -28,7 +28,7 @@ def merge_scores(classifier_path_list, clip_second):
     df_res["soft"] = (df_res["soft_x"] + df_res["soft_y"]) / 2
 
     df_res["hard"] = (df_res["soft"] > 0.5).astype(int)
-    df_res.to_csv("combined", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
+    df_res.to_csv("audio_gmm_image_conv_noconfidence", sep=" ", columns=["id", "soft", "hard"], header=False, index=False)
 
 
 if __name__ == "__main__":
